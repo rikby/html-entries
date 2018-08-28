@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Kirby Rs']
   s.email       = 'bizkirby@gmail.com'
   s.files       = [
-      'lib/html_entry/page_fetcher.rb'
+      'lib/page_fetcher.rb'
   ]
   s.homepage    =
       'https://github.com/rikby/html-entries'
