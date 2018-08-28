@@ -7,7 +7,7 @@ page_fetcher              = HtmlEntry::PageFetcher.new
 page_fetcher.instructions = {
     block: {
         type:     :selector,
-        selector: '#question-mini-list .question-summary',
+        selector: '#question-mini-list .question-summary'
     },
     entity:
            [
@@ -18,8 +18,8 @@ page_fetcher.instructions = {
                        summary: {},
                        url:     {
                            type:      :attribute,
-                           attribute: 'href',
-                       },
+                           attribute: 'href'
+                       }
                    }
                },
                {
@@ -43,7 +43,7 @@ page_fetcher.instructions = {
                    data:        {
                        accepted: {
                            type:    :boolean,
-                           default: false,
+                           default: false
                        }
                    }
                },
@@ -58,11 +58,11 @@ page_fetcher.instructions = {
                                    tag: {},
                                    url: {
                                        type:      :attribute,
-                                       attribute: 'href',
-                                   },
+                                       attribute: 'href'
+                                   }
                                }
                            }
-                       },
+                       }
                    }
                },
                {
@@ -71,8 +71,8 @@ page_fetcher.instructions = {
                        created_ago: {},
                        created_at:  {
                            type:      :attribute,
-                           attribute: 'title',
-                       },
+                           attribute: 'title'
+                       }
                    }
                },
                {
@@ -94,8 +94,8 @@ page_fetcher.instructions = {
                                                         name: {},
                                                         url:  {
                                                             type:      :attribute,
-                                                            attribute: 'href',
-                                                        },
+                                                            attribute: 'href'
+                                                        }
                                                     }
                                                 },
                                                 {
@@ -103,13 +103,13 @@ page_fetcher.instructions = {
                                                     # to avoid fetching deep child "<span>" nodes
                                                     xpath: 'span',
                                                     data:  {
-                                                        score: {},
+                                                        score: {}
                                                     }
-                                                },
+                                                }
                                             ]
-                       },
+                       }
                    }
-               },
+               }
            ]
 }
 
@@ -119,16 +119,16 @@ items = page_fetcher.fetch Nokogiri::HTML(
 
 # show items (first two and last two) in terminal
 
-items.each_with_index do |item, i|
+items.each_with_index do |item, _i|
   begin
     puts <<-OUTPUT
 Question: "#{item[:summary]}"
 posted by #{item[:author][:name]} #{item[:created_ago]}
 tags:     #{item[:tags].map {|e| e[:tag]}.join(', ')}
-accepted: #{(!item.key(:accepted) and item[:accepted] ? true.to_s : false.to_s)}
+accepted: #{(!item.key(:accepted) && item[:accepted] ? true.to_s : false.to_s)}
 
     OUTPUT
-  rescue => e
+  rescue StandardError => e
     pp item
     pp e
     exit 55

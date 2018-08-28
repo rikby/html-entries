@@ -6,16 +6,23 @@ require_relative '../page'
 module HtmlEntry
   module Page
     ##
-    # This entity-html_entry class designed for reading data from HTML/XML block according to instructions
+    # This entity-html_entry class designed for reading data from HTML/XML block
+    # according to instructions
     #
     # @see tests/html_entry/page/test_entity_fetcher.rb
-
+    #
     class EntityFetcher
       ##
       # Cache fetched XML elements
       # @type [Hash]
 
       @selector_cache = {}
+
+      # Get instructions
+      #
+      # @return [Array]
+
+      attr_reader :instructions
 
       ##
       # Init
@@ -64,22 +71,14 @@ module HtmlEntry
         instructions = [instructions] unless instructions.instance_of? Array
 
         @instructions = instructions
-        self
-      end
-
-      # Get instructions
-      #
-      # @return [Array]
-
-      def get_instructions
-        @instructions
       end
 
       ##
       # Fetch data from document
       #
       # @param [Nokogiri::HTML::Document, Nokogiri::XML::Element] document
-      # @param [TrueClass, FalseClass] plenty Get plenty of elements or the only one
+      # @param [TrueClass, FalseClass] plenty Get plenty of elements
+      #                                       or the only one
       # @return [Hash, Array]
 
       def fetch(document:, plenty: false)
@@ -99,7 +98,7 @@ module HtmlEntry
       def fetch_single(document)
         collector = get_values_collector(document)
 
-        get_instructions.each do |instruction|
+        instructions.each do |instruction|
           node = Page.fetch_node(document, instruction)
 
           next unless instruction[:data]
@@ -118,10 +117,8 @@ module HtmlEntry
       # @return [Page::ValuesCollector]
 
       def get_values_collector(document)
-        Page::ValuesCollector.new(
-            document:     document,
-            instructions: get_instructions
-        )
+        Page::ValuesCollector.new document:     document,
+                                  instructions: instructions
       end
 
       ##
@@ -129,40 +126,12 @@ module HtmlEntry
       #
       # @param [Nokogiri::HTML::Document, Nokogiri::XML::Element] document
       # @return [Hash]
-
       def fetch_plenty(document)
-        # @type [HtmlEntry::Page::ValuesCollector[]] collectors
-        collectors = {}
-        unless get_instructions.instance_of? Array
+        unless instructions.instance_of? Array
           raise 'Instructions must be an array.'
         end
 
-        data = []
-
-        get_instructions.each do |instruction|
-          raise 'Instruction must be Hash.' unless instruction.instance_of? Hash
-
-          nodes = Page.fetch_nodes(document, instruction)
-
-          nodes = [nil] if nodes.nil?
-          nodes = [nil] if instruction[:allow_empty] && (nodes.count == 0)
-
-          nodes.each_with_index do |node, i|
-            if instruction[:merge]
-              # gather items under the same collector
-              i = 0
-            end
-
-            unless collectors.key? i
-              collectors[i] = get_values_collector(document)
-            end
-
-            next unless instruction[:data]
-            instruction[:data].each do |name, data_instruction|
-              collectors[i].fetch name, data_instruction, node
-            end
-          end
-        end
+        collectors, data = process_instructions(document)
 
         collectors.each do |_i, collector|
           # @type [HtmlEntry::Page::ValuesCollector] collector
@@ -173,6 +142,46 @@ module HtmlEntry
       end
 
       protected
+
+      def process_instructions(document)
+        data = []
+        # @type [HtmlEntry::Page::ValuesCollector[]] collectors
+        collectors = {}
+        instructions.each do |instruction|
+          raise 'Instruction must be Hash.' unless instruction.instance_of? Hash
+          nodes = retrieve_nodes(document, instruction)
+          nodes.each_with_index do |node, i|
+            process_node(document, node, instruction, collectors, i)
+          end
+        end
+        [collectors, data]
+      end
+
+      # @param [Array, Nil] instruction
+      def retrieve_nodes(document, instruction)
+        nodes = Page.fetch_nodes(document, instruction)
+        if nodes.nil? || instruction[:allow_empty] && nodes.count.zero?
+          nodes = [nil]
+        end
+        nodes
+      end
+
+      def process_node(document, node, instruction, collectors, index)
+        if instruction[:merge]
+          # gather items under the same collector
+          index = 0
+        end
+
+        unless collectors.key? index
+          collectors[index] = get_values_collector(document)
+        end
+
+        return unless instruction[:data]
+
+        instruction[:data].each do |name, data_instruction|
+          collectors[index].fetch name, data_instruction, node
+        end
+      end
 
       ##
       # Check if merge nodes data must disabled

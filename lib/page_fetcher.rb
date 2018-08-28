@@ -1,6 +1,9 @@
 require_relative 'page/entity_fetcher'
 
 module HtmlEntry
+  ##
+  # Page fetcher
+  #
   class PageFetcher
     ##
     # Set instructions
@@ -8,10 +11,7 @@ module HtmlEntry
     # @param [Hash] instructions
     # @return [self]
 
-    def instructions=(instructions)
-      @instructions = instructions
-      self
-    end
+    attr_writer :instructions
 
     # Get instructions
     #
@@ -28,11 +28,15 @@ module HtmlEntry
       items = []
       if instructions[:block].nil?
         # "block" instructions is not defined
-        if document.instance_of?(Nokogiri::HTML::Document)
-          block_document = fetch_block_document(document, type: :selector, selector: 'body').first
-        else
-          block_document = document
-        end
+        block_document = if document.instance_of?(Nokogiri::HTML::Document)
+                           fetch_block_document(
+                               document,
+                               type:     :selector,
+                               selector: 'body'
+                           ).first
+                         else
+                           document
+                         end
 
         fetch_data(block_document, instructions[:entity]).each do |element|
           items.push element

@@ -1,4 +1,7 @@
 module HtmlEntry
+  ##
+  # Page module
+  #
   module Page
     ##
     # Get node by XPath or CSS selector

@@ -11,7 +11,7 @@ module HtmlEntry
         obj              = EntityFetcher.new
         value            = [{:aa => 'aa'}]
         obj.instructions = value
-        assert_equal(value, obj.get_instructions)
+        assert_equal(value, obj.instructions)
       end
 
       # Test fetching label text
