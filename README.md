@@ -1,5 +1,5 @@
 # HTML Entries
-This Ruby gem may help to fetch entities by provided intructions from HTML.
+This Ruby gem may help to fetch entries data by provided intructions from HTML.
 
 ## Installation
 
