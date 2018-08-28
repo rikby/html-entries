@@ -20,7 +20,7 @@ module HtmlEntry
     # @return [Nokogiri::XML::NodeSet]
 
     def fetch_nodes(document, instruction)
-      unless document.instance_of? Nokogiri::HTML::Document or document.instance_of? Nokogiri::XML::Element
+      unless document.instance_of?(Nokogiri::HTML::Document) || document.instance_of?(Nokogiri::XML::Element)
         raise '"document" must be an instance of Nokogiri::HTML::Document.'
       end
       if instruction[:selector]

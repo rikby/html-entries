@@ -21,7 +21,7 @@ module HtmlEntry
       # Init
 
       def initialize
-        @selector_cache = @selector_cache || {}
+        @selector_cache ||= {}
       end
 
       ##
@@ -99,15 +99,14 @@ module HtmlEntry
       def fetch_single(document)
         collector = get_values_collector(document)
 
-        get_instructions.each {|instruction|
-          node = Page::fetch_node(document, instruction)
+        get_instructions.each do |instruction|
+          node = Page.fetch_node(document, instruction)
 
-          if instruction[:data]
-            instruction[:data].each {|name, data_instruction|
-              collector.fetch name, data_instruction, node
-            }
+          next unless instruction[:data]
+          instruction[:data].each do |name, data_instruction|
+            collector.fetch name, data_instruction, node
           end
-        }
+        end
 
         collector.data
       end
@@ -120,10 +119,9 @@ module HtmlEntry
 
       def get_values_collector(document)
         Page::ValuesCollector.new(
-            {
-                :document     => document,
-                :instructions => get_instructions,
-            })
+            document:     document,
+            instructions: get_instructions
+        )
       end
 
       ##
@@ -142,14 +140,12 @@ module HtmlEntry
         data = []
 
         get_instructions.each do |instruction|
-          unless instruction.instance_of? Hash
-            raise 'Instruction must be Hash.'
-          end
+          raise 'Instruction must be Hash.' unless instruction.instance_of? Hash
 
-          nodes = Page::fetch_nodes(document, instruction)
+          nodes = Page.fetch_nodes(document, instruction)
 
           nodes = [nil] if nodes.nil?
-          nodes = [nil] if instruction[:allow_empty] and nodes.count == 0
+          nodes = [nil] if instruction[:allow_empty] && (nodes.count == 0)
 
           nodes.each_with_index do |node, i|
             if instruction[:merge]
@@ -161,15 +157,14 @@ module HtmlEntry
               collectors[i] = get_values_collector(document)
             end
 
-            if instruction[:data]
-              instruction[:data].each do |name, data_instruction|
-                collectors[i].fetch name, data_instruction, node
-              end
+            next unless instruction[:data]
+            instruction[:data].each do |name, data_instruction|
+              collectors[i].fetch name, data_instruction, node
             end
           end
         end
 
-        collectors.each do |i, collector|
+        collectors.each do |_i, collector|
           # @type [HtmlEntry::Page::ValuesCollector] collector
           data.push collector.data
         end
@@ -185,12 +180,10 @@ module HtmlEntry
       def data_has_option?(instruction, option:, value:)
         return false if instruction.key :merge
 
-        !(instruction[:data].select! do |k, el|
-          (el.kind_of? Hash and el[option] == value)
-        end.nil?)
+        !instruction[:data].select! do |_k, el|
+          (el.is_a?(Hash) && (el[option] == value))
+        end.nil?
       end
-
     end
   end
 end
-

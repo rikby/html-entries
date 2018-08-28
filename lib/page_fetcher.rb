@@ -17,9 +17,7 @@ module HtmlEntry
     #
     # @return [Hash]
 
-    def instructions
-      @instructions
-    end
+    attr_reader :instructions
 
     # Fetch entities from document
     #
@@ -31,7 +29,7 @@ module HtmlEntry
       if instructions[:block].nil?
         # "block" instructions is not defined
         if document.instance_of?(Nokogiri::HTML::Document)
-          block_document = fetch_block_document(document, {:type => :selector, :selector => 'body'}).first
+          block_document = fetch_block_document(document, type: :selector, selector: 'body').first
         else
           block_document = document
         end
@@ -41,11 +39,11 @@ module HtmlEntry
         end
       else
         # fetch each "block" and process entities
-        fetch_block_document(document, instructions[:block]).each {|block_document|
-          fetch_data(block_document, instructions[:entity]).each {|element|
+        fetch_block_document(document, instructions[:block]).each do |block_document|
+          fetch_data(block_document, instructions[:entity]).each do |element|
             items.push element
-          }
-        }
+          end
+        end
       end
       items
     end
@@ -60,7 +58,7 @@ module HtmlEntry
       if instructions[:last_page][:type] == :function
         !!call_function(document, instructions[:last_page])
       else
-        Page::fetch_nodes(document, instructions[:last_page]).count > 0
+        Page.fetch_nodes(document, instructions[:last_page]).count > 0
       end
     end
 
@@ -90,7 +88,7 @@ module HtmlEntry
 
       return call_function(document, instructions) if instructions[:type] == :function
 
-      Page::fetch_nodes(document, instructions)
+      Page.fetch_nodes(document, instructions)
     end
 
     ##

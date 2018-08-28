@@ -1,5 +1,4 @@
 module HtmlEntry
-  class Error < StandardError;
+  class Error < StandardError
   end
 end
-

@@ -37,7 +37,7 @@ module HtmlEntry
       # @return [String, Nokogiri::XML::Element]
 
       def fetch(name, instruction, node)
-        if node and instruction[:type] == :attribute
+        if node && (instruction[:type] == :attribute)
           value = get_node_attribute(
               node,
               instruction
@@ -54,22 +54,22 @@ module HtmlEntry
               plenty:      (instruction[:children_plenty].nil? ?
                                 true : instruction[:children_plenty])
           )
-        elsif node && (instruction[:type] == :value || nil == instruction[:type])
+        elsif node && (instruction[:type] == :value || instruction[:type].nil?)
           # empty type should be determined as :value
           value = node
-        elsif instruction.kind_of? Hash and !instruction[:default].nil?
+        elsif instruction.is_a?(Hash) && !instruction[:default].nil?
           value = instruction[:default]
-        elsif nil == node
+        elsif node.nil?
           value = nil
         else
-          raise HtmlEntry::Error.new 'Unknown instruction type or XML/HTML value not found.'
+          raise HtmlEntry::Error, 'Unknown instruction type or XML/HTML value not found.'
         end
 
         value = filter_value(value, instruction)
-        if @data[name].instance_of? Array and value.instance_of? Array
+        if @data[name].instance_of?(Array) && value.instance_of?(Array)
           @data[name] = [@data[name], value].flatten
         else
-          unless @data[name].nil? and true != instruction[:overwrite]
+          unless @data[name].nil? && (instruction[:overwrite] != true)
             raise "Value already set for data key name '#{name}'."
           end
           @data[name] = value
@@ -83,9 +83,7 @@ module HtmlEntry
       #
       # @return [Hash]
 
-      def data
-        @data
-      end
+      attr_reader :data
 
       protected
 
@@ -133,9 +131,7 @@ module HtmlEntry
         return value.to_s.strip if filter == :node_text
 
         # return text without tags by default
-        if value.instance_of?(Nokogiri::XML::Element)
-          value = value.text
-        end
+        value = value.text if value.instance_of?(Nokogiri::XML::Element)
 
         # return integer
         return value.to_i if filter == :to_i
@@ -143,7 +139,7 @@ module HtmlEntry
         # return non-stripped text
         return value.to_s if filter == :no_strip
 
-        return value.strip if value.kind_of? String
+        return value.strip if value.is_a? String
 
         value
       end
@@ -173,4 +169,3 @@ module HtmlEntry
     end
   end
 end
-
