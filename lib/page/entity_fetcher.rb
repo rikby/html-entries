@@ -148,12 +148,11 @@ module HtmlEntry
 
           nodes = Page::fetch_nodes(document, instruction)
 
-          nodes = [{}] if nodes.nil?
+          nodes = [nil] if nodes.nil?
+          nodes = [nil] if instruction[:allow_empty] and nodes.count == 0
 
           nodes.each_with_index do |node, i|
-            node = nil if node == {stab: :empty}
-
-            if instruction[:gather_data]
+            if instruction[:merge]
               # gather items under the same collector
               i = 0
             end
@@ -179,6 +178,17 @@ module HtmlEntry
       end
 
       protected
+
+      ##
+      # Check if merge nodes data must disabled
+
+      def data_has_option?(instruction, option:, value:)
+        return false if instruction.key :merge
+
+        !(instruction[:data].select! do |k, el|
+          (el.kind_of? Hash and el[option] == value)
+        end.nil?)
+      end
 
     end
   end

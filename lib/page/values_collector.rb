@@ -46,7 +46,7 @@ module HtmlEntry
           value = call_function(name, instruction)
         elsif instruction[:type] == :boolean || instruction[:type] == :bool
           value = !!node
-        elsif instruction[:type] == :children
+        elsif node && instruction[:type] == :children
           value = children(
               name:        name,
               instruction: instruction,
@@ -57,7 +57,7 @@ module HtmlEntry
         elsif node && (instruction[:type] == :value || nil == instruction[:type])
           # empty type should be determined as :value
           value = node
-        elsif instruction.kind_of? Hash and instruction.key? :default
+        elsif instruction.kind_of? Hash and !instruction[:default].nil?
           value = instruction[:default]
         elsif nil == node
           value = nil

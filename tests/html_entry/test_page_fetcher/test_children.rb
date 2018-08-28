@@ -40,8 +40,8 @@ module HtmlEntry
               {
                   :xpath => 'a/following-sibling::ul/li',
                   # gather_data must be set because each <a> tag placed into a different document
-                  :gather_data => true,
-                  :data        => {
+                  :merge => true,
+                  :data  => {
                       :_children => {
                           :type         => :children,
                           :instructions => :the_same,
@@ -107,8 +107,8 @@ module HtmlEntry
               {
                   :xpath => 'a/following-sibling::ul/li',
                   # gather_data must be set because each <a> tag placed into a different document
-                  :gather_data => true,
-                  :data        => {
+                  :merge => true,
+                  :data  => {
                       :_children => {
                           :type         => :children,
                           :instructions => :the_same,
