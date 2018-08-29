@@ -32,7 +32,6 @@ fetcher.instructions = {
     entity:
            [
                {
-                   type:     :selector,
                    selector: '.summary h3 a',
                    data:     {
                        summary: {},
@@ -43,7 +42,6 @@ fetcher.instructions = {
                    }
                },
                {
-                   type:     :selector,
                    selector: '.votes > .mini-counts > span',
                    data:     {
                        votes: {}
