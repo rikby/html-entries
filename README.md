@@ -3,9 +3,13 @@ This Ruby gem may help to fetch entries data from HTML by provided intructions.
 
 ## Installation
 
-Install the gem:
+Console:
 ```
 $ gem install html-entry
+```
+Gemfile:
+```ruby
+gem 'html-entry', '~> 0.1.0'
 ```
 
 ## Using
