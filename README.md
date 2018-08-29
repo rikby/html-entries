@@ -25,7 +25,7 @@ require 'html-entry'
 
 fetcher              = HtmlEntry::PageFetcher.new
 fetcher.instructions = {
-    # This block fetched by using CSS selector contains an entry (or entries).
+    # This block can be fetched by using CSS selector contains an entry (or entries).
     # There are might be several blocks, as in this example.
     block: {
         type:     :selector,
