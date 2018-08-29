@@ -25,12 +25,18 @@ require 'html-entry'
 
 fetcher              = HtmlEntry::PageFetcher.new
 fetcher.instructions = {
+    # This block fetched by using CSS selector contains an entry (or entries).
+    # There are might be several blocks, as in this example.
     block: {
         type:     :selector,
         selector: '#question-mini-list .question-summary',
     },
+    # Further, we have to describe entity attributes
     entity:
            [
+               # If fetched node/s contains several attributes data,
+               # you may describe all of them.
+               # In this example: question "summary" and "url".
                {
                    selector: '.summary h3 a',
                    data:     {
@@ -44,7 +50,9 @@ fetcher.instructions = {
                {
                    selector: '.votes > .mini-counts > span',
                    data:     {
-                       votes: {}
+                       votes: {
+                           filter: :to_i
+                       }
                    }
                },
            ]
@@ -78,6 +86,6 @@ Element data:
 
 {:summary=>"Scrapy on aws ec2 ubuntu redirect for booking.com",
  :url=>"/questions/52056897/scrapy-on-aws-ec2-ubuntu-redirect-for-booking-com",
- :votes=>"2",
+ :votes=>2,
 }
 ```
