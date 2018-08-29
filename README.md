@@ -14,8 +14,17 @@ gem 'html-entry', '~> 0.1.0'
 
 ## Using
 
+### Extended examples
+Please take a look an extended version of "Quick Start" in the file [tests/example/fetch_url.rb](tests/example/fetch_url.rb).
+
+Please review tests to get different examples in these files:
+- [tests/html_entry/test_page_fetcher.rb](tests/html_entry/test_page_fetcher.rb)
+- [tests/html_entry/test_page_fetcher/test_children.rb](tests/html_entry/test_page_fetcher/test_children.rb)
+- [tests/html_entry/test_page_fetcher/test_multi_data.rb](tests/html_entry/test_page_fetcher/test_multi_data.rb)
+
+### Quick Start
+
 This example may show how to fetch TOP questions from https://stackoverflow.com/ home page.
-Please take a look an extended version in file [tests/example/fetch_url.rb](tests/example/fetch_url.rb)
 
 ```ruby
 require 'pp'
