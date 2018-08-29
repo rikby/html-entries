@@ -23,6 +23,8 @@ module HtmlEntry
 
       @data = {}
 
+      attr_reader :data
+
       def initialize(options = {})
         @options = options
         @data    = {}
@@ -39,8 +41,8 @@ module HtmlEntry
       def fetch(name, instruction, node)
         if node && (instruction[:type] == :attribute)
           value = get_node_attribute(
-              node,
-              instruction
+            node,
+            instruction
           )
         elsif instruction[:type] == :function
           value = call_function(name, instruction)
@@ -48,11 +50,14 @@ module HtmlEntry
           value = !!node
         elsif node && instruction[:type] == :children
           value = children(
-              name:        name,
-              instruction: instruction,
-              node:        node,
-              plenty:      (instruction[:children_plenty].nil? ?
-                                true : instruction[:children_plenty])
+            name:        name,
+            instruction: instruction,
+            node:        node,
+            plenty:      if instruction[:children_plenty].nil?
+                           true
+                         else
+                           instruction[:children_plenty]
+                         end
           )
         elsif node && (instruction[:type] == :value || instruction[:type].nil?)
           # empty type should be determined as :value
@@ -66,24 +71,17 @@ module HtmlEntry
         end
 
         value = filter_value(value, instruction)
-        if @data[name].instance_of?(Array) && value.instance_of?(Array)
-          @data[name] = [@data[name], value].flatten
+        if data[name].instance_of?(Array) && value.instance_of?(Array)
+          data[name] = [data[name], value].flatten
         else
-          unless @data[name].nil? && (instruction[:overwrite] != true)
+          unless data[name].nil? && (!instruction[:overwrite])
             raise "Value already set for data key name '#{name}'."
           end
-          @data[name] = value
+          data[name] = value
         end
 
-        @data[name]
+        data[name]
       end
-
-      ##
-      # Get collected data
-      #
-      # @return [Hash]
-
-      attr_reader :data
 
       protected
 
@@ -94,10 +92,13 @@ module HtmlEntry
       # @param [Hash] instruction
       # @param [Nokogiri::XML::Element] node
       # @return [Hash, Array]
-
+      #
       def children(instruction:, node:, plenty: nil, name: nil)
-        instruction = instruction[:instructions] == :the_same ?
-                          @options[:instructions] : instruction[:instructions]
+        instruction = if instruction[:instructions] == :the_same
+                        @options[:instructions]
+                      else
+                        instruction[:instructions]
+                      end
 
         fetcher              = Page::EntityFetcher.new
         fetcher.instructions = instruction
@@ -111,7 +112,7 @@ module HtmlEntry
       # @param [Nokogiri::XML::Element] value
       # @param [Hash] instruction
       # @return [String, Nokogiri::XML::Element]
-
+      #
       def filter_value(value, instruction)
         filter(value, instruction[:filter])
       end
@@ -122,7 +123,7 @@ module HtmlEntry
       # @param [Nokogiri::XML::Element] value
       # @param [Symbol] filter
       # @return [String, Nokogiri::XML::Element]
-
+      #
       def filter(value, filter = nil)
         # return as is, :filter can be omitted in instruction
         return value if filter == :element
@@ -161,7 +162,7 @@ module HtmlEntry
 
       def call_function(name, instruction)
         if instruction[:function].instance_of? Proc
-          instruction[:function].call name, instruction, @data, @options
+          instruction[:function].call name, instruction, data, @options
         else
           HtmlEntry::Error.new ':function is not instance of Proc'
         end
