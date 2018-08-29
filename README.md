@@ -1,5 +1,5 @@
 # HTML Entries
-This Ruby gem may help to fetch entries data by provided intructions from HTML.
+This Ruby gem may help to fetch entries data from HTML by provided intructions.
 
 ## Installation
 
@@ -9,6 +9,9 @@ $ gem install html-entry
 ```
 
 ## Using
+
+This example may show how to fetch TOP questions from https://stackoverflow.com/ home page.
+Please take a look an extended version in file [tests/example/fetch_url.rb](tests/example/fetch_url.rb)
 
 ```ruby
 require 'pp'
@@ -36,6 +39,7 @@ fetcher.instructions = {
                    }
                },
                {
+                   type:     :selector,
                    selector: '.votes > .mini-counts > span',
                    data:     {
                        votes: {}
@@ -75,5 +79,3 @@ Element data:
  :votes=>"2",
 }
 ```
-
-Please take a look an extended version in file [tests/example/fetch_url.rb](tests/example/fetch_url.rb)
