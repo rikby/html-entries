@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'mocha/test_unit'
 require 'nokogiri'
-require_relative '../../lib/page_fetcher'
+require_relative '../../lib/html_entry/page_fetcher'
 
 module HtmlEntry
   class TestPageFetcher < Test::Unit::TestCase

@@ -5,11 +5,11 @@ This Ruby gem may help to fetch entries data from HTML by provided intructions.
 
 Console:
 ```
-$ gem install html-entry
+$ gem install html_entry
 ```
 Gemfile:
 ```ruby
-gem 'html-entry', '~> 0.1.0'
+gem 'html_entry', '~> 0.1.0'
 ```
 
 ## Using
@@ -30,7 +30,7 @@ This example may show how to fetch TOP questions from https://stackoverflow.com/
 require 'pp'
 require 'nokogiri'
 require 'open-uri'
-require 'html-entry'
+require 'html_entry'
 
 fetcher              = HtmlEntry::PageFetcher.new
 fetcher.instructions = {

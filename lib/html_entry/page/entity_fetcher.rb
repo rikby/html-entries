@@ -21,12 +21,12 @@ module HtmlEntry
       # Get instructions
       #
       # @return [Array]
-
+      #
       attr_reader :instructions
 
       ##
       # Init
-
+      #
       def initialize
         @selector_cache ||= {}
       end
@@ -185,7 +185,7 @@ module HtmlEntry
 
       ##
       # Check if merge nodes data must disabled
-
+      #
       def data_has_option?(instruction, option:, value:)
         return false if instruction.key :merge
 

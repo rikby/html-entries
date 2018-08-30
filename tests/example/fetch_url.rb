@@ -1,7 +1,7 @@
 require 'nokogiri'
 require 'pp'
 require 'open-uri'
-require_relative '../../lib/page_fetcher'
+require_relative '../../lib/html_entry/page_fetcher'
 
 page_fetcher              = HtmlEntry::PageFetcher.new
 page_fetcher.instructions = {

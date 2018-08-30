@@ -7,20 +7,20 @@ module HtmlEntry
     # This class responsible for getting values according to an instruction
     #
     # @see tests/html_entry/page/test_entity_fetcher.rb
-
+    #
     class ValuesCollector
       ##
       # Extra options
       #
       # @type [Hash]
-
+      #
       @options = {}
 
       ##
       # Collected data
       #
       # @type [Hash]
-
+      #
       @data = {}
 
       attr_reader :data

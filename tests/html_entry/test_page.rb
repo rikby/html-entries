@@ -1,17 +1,21 @@
 require 'test/unit'
 require 'mocha/test_unit'
 require 'nokogiri'
-require_relative '../../lib/page'
+require_relative '../../lib/html_entry/page'
 
 module HtmlEntry
+  ##
+  # Tests for HtmlEntry::Page
+  #
   class TestPage < Test::Unit::TestCase
-
+    ##
     # Test fetching nodes on a page
-    def test_following_sibling
-      document = Nokogiri::HTML(content)
-
-      block = Page::fetch_node(document, {:css => '#block'})
-      nodes = Page::fetch_nodes(block, {:xpath => 'a/following-sibling::ul/li'})
+    #
+    def test_xpath_following_sibling
+      nodes = Page.fetch_nodes(
+        Page.fetch_node(Nokogiri::HTML(content), css: '#block'),
+        xpath: 'a/following-sibling::ul/li'
+      )
 
       assert_equal(2, nodes.count)
     end
@@ -19,14 +23,16 @@ module HtmlEntry
     protected
 
     def content
-      <<-'HTML'
-<li id="block">
-  <a>base</a>
-  <ul>
-    <li><a>node #1</a></li>
-    <li><a>node #2</a></li>
-  </ul>
-<li>
+      <<-HTML
+      <ul>
+        <li id="block">
+          <a>base</a>
+          <ul>
+            <li><a>node #1</a></li>
+            <li><a>node #2</a></li>
+          </ul>
+        <li>
+      <ul>
       HTML
     end
   end
