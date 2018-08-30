@@ -25,7 +25,7 @@ page_fetcher.instructions = {
            {
              selector: '.votes span',
              data:     {
-               votes: {filter: :to_i}
+               votes: { filter: :to_i }
              }
            },
            {
@@ -124,7 +124,7 @@ items.each_with_index do |item, _i|
     puts <<-OUTPUT.strip_heredoc
       Question: "#{item[:summary]}"
       posted by #{item[:author][:name]} #{item[:created_ago]}
-      tags:     #{item[:tags].map {|e| e[:tag]}.join(', ')}
+      tags:     #{item[:tags].map { |e| e[:tag] }.join(', ')}
       accepted: #{(!item.key(:accepted) && item[:accepted] ? true.to_s : false.to_s)}
 
     OUTPUT
