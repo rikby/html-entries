@@ -8,7 +8,7 @@ module HtmlEntry
     # Test get/set instructions
     def test_set_instructions
       obj              = PageFetcher.new
-      value            = { :aa => 'aa' }
+      value            = { aa: 'aa' }
       obj.instructions = value
       assert_equal(value, obj.instructions)
     end
@@ -16,16 +16,16 @@ module HtmlEntry
     # Test fetching nodes on a page
     def test_fetch_nodes
       obj              = PageFetcher.new
-      html             = Nokogiri::HTML(content)
+      html             = Nokogiri::HTML content
       obj.instructions = {
-        :entity => [
+        entity: [
           {
-            :type     => :selector,
-            :selector => '.blocks .nodes',
+            type:     :selector,
+            selector: '.blocks .nodes',
             # Instructions for entity which will be used in EntityFetcher
-            :data => {
-              :my_item => {
-                :instructions => { :selector => 'span.item-text' },
+            data: {
+              my_item: {
+                instructions: { selector: 'span.item-text' },
               }
             }
 
@@ -35,10 +35,10 @@ module HtmlEntry
 
       # todo mock using EntityFetcher class
       expected = [
-        { :my_item => 'a1' },
-        { :my_item => 'a2' },
-        { :my_item => 'b1' },
-        { :my_item => 'b2' },
+        { my_item: 'a1' },
+        { my_item: 'a2' },
+        { my_item: 'b1' },
+        { my_item: 'b2' },
       ]
       assert_equal(
         expected,
@@ -52,27 +52,27 @@ module HtmlEntry
 
       obj.instructions = {
         # block where entities can be found
-        :block  => {
-          :type     => :selector,
-          :selector => '.main-menu > div',
+        block:  {
+          type:     :selector,
+          selector: '.main-menu > div',
         },
-        :entity => [
+        entity: [
           {
-            :xpath => 'a',
-            :data  => {
-              :label => {},
-              :url   => {
-                :type      => :attribute,
-                :attribute => 'href',
+            xpath: 'a',
+            data:  {
+              label: {},
+              url:   {
+                type:      :attribute,
+                attribute: 'href',
               }
             }
           },
           {
-            :xpath => 'a/following-sibling::div',
-            :data  => {
-              :_children => {
-                :type         => :children,
-                :instructions => :the_same
+            xpath: 'a/following-sibling::div',
+            data:  {
+              _children: {
+                type:         :children,
+                instructions: :the_same
               },
             },
           }
@@ -84,54 +84,54 @@ module HtmlEntry
       # region expected
       expected = [
         {
-          :label     => 'Video',
-          :url       => '/video',
-          :_children => [
+          label:     'Video',
+          url:       '/video',
+          _children: [
             {
-              :label     => 'Movies',
-              :url       => '/video/movies',
-              :_children => [
+              label:     'Movies',
+              url:       '/video/movies',
+              _children: [
                 {
-                  :label => 'Action',
-                  :url   => '/video/movies/action',
+                  label: 'Action',
+                  url:   '/video/movies/action',
                 },
                 {
-                  :label => 'Sci-Fi',
-                  :url   => '/video/movies/sci-fi',
+                  label: 'Sci-Fi',
+                  url:   '/video/movies/sci-fi',
                 },
               ]
             },
             {
-              :label     => 'Series',
-              :url       => '/video/series',
-              :_children => [
+              label:     'Series',
+              url:       '/video/series',
+              _children: [
                 {
-                  :label => 'Action',
-                  :url   => '/video/series/action',
+                  label: 'Action',
+                  url:   '/video/series/action',
                 },
                 {
-                  :label => 'Sci-Fi',
-                  :url   => '/video/series/sci-fi',
+                  label: 'Sci-Fi',
+                  url:   '/video/series/sci-fi',
                 },
               ]
             },
             {
-              :label => 'Cartoons',
-              :url   => '/video/cartoons',
+              label: 'Cartoons',
+              url:   '/video/cartoons',
             },
           ]
         },
         {
-          :label     => 'Books',
-          :url       => '/books',
-          :_children => [
+          label:     'Books',
+          url:       '/books',
+          _children: [
             {
-              :label => 'Documentary',
-              :url   => '/books/doc',
+              label: 'Documentary',
+              url:   '/books/doc',
             },
             {
-              :label => 'Artistic',
-              :url   => '/books/artistic',
+              label: 'Artistic',
+              url:   '/books/artistic',
             },
           ]
         },
@@ -145,8 +145,8 @@ module HtmlEntry
       obj              = PageFetcher.new
       html             = Nokogiri::HTML(content)
       obj.instructions = {
-        :last_page => {
-          :selector => '.pager > span.active:last',
+        last_page: {
+          selector: '.pager > span.active:last',
         }
       }
       assert_true(obj.last_page?(html))

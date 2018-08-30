@@ -18,19 +18,19 @@ module HtmlEntry
 
       obj.instructions = {
         # block where entities can be found
-        :block  => {
-          :type     => :selector,
-          :selector => '#main/li',
+        block:  {
+          type:     :selector,
+          selector: '#main/li',
         },
-        :entity => [
+        entity: [
           # data instructions of main element
           {
-            :xpath => 'a',
-            :data  => {
-              :label => {},
-              :url   => {
-                :type      => :attribute,
-                :attribute => 'href',
+            xpath: 'a',
+            data:  {
+              label: {},
+              url:   {
+                type:      :attribute,
+                attribute: 'href',
               }
             }
           },
@@ -38,13 +38,13 @@ module HtmlEntry
           # each found element will be processed by the same entity instructions
           # because :instructions => :the_same
           {
-            :xpath => 'a/following-sibling::ul/li',
+            xpath: 'a/following-sibling::ul/li',
             # gather_data must be set because each <a> tag placed into a different document
-            :merge => true,
-            :data  => {
-              :_children => {
-                :type         => :children,
-                :instructions => :the_same,
+            merge: true,
+            data:  {
+              _children: {
+                type:         :children,
+                instructions: :the_same,
               },
             },
           }
@@ -54,20 +54,20 @@ module HtmlEntry
       # region expected
       expected = [
         {
-          :label => 'Home',
-          :url   => '/home',
+          label: 'Home',
+          url:   '/home',
         },
         {
-          :label     => 'Plenty',
-          :url       => '/plenty',
-          :_children => [
+          label:     'Plenty',
+          url:       '/plenty',
+          _children: [
             {
-              :label => 'Plenty One',
-              :url   => '/plenty/one',
+              label: 'Plenty One',
+              url:   '/plenty/one',
             },
             {
-              :label => 'Plenty Two',
-              :url   => '/plenty/two'
+              label: 'Plenty Two',
+              url:   '/plenty/two'
             },
           ]
         }
@@ -85,19 +85,19 @@ module HtmlEntry
 
       obj.instructions = {
         # block where entities can be found
-        :block  => {
-          :type     => :selector,
-          :selector => '#main/li',
+        block:  {
+          type:     :selector,
+          selector: '#main/li',
         },
-        :entity => [
+        entity: [
           # data instructions of main element
           {
-            :xpath => 'a',
-            :data  => {
-              :label => {},
-              :url   => {
-                :type      => :attribute,
-                :attribute => 'href',
+            xpath: 'a',
+            data:  {
+              label: {},
+              url:   {
+                type:      :attribute,
+                attribute: 'href',
               }
             }
           },
@@ -105,13 +105,13 @@ module HtmlEntry
           # each found element will be processed by the same entity instructions
           # because :instructions => :the_same
           {
-            :xpath => 'a/following-sibling::ul/li',
+            xpath: 'a/following-sibling::ul/li',
             # gather_data must be set because each <a> tag placed into a different document
-            :merge => true,
-            :data  => {
-              :_children => {
-                :type         => :children,
-                :instructions => :the_same,
+            merge: true,
+            data:  {
+              _children: {
+                type:         :children,
+                instructions: :the_same,
               },
             },
           }
@@ -121,44 +121,44 @@ module HtmlEntry
       # region expected
       expected = [
         {
-          :label     => 'one',
-          :url       => '/1',
-          :_children => [
+          label:     'one',
+          url:       '/1',
+          _children: [
             {
-              :label => 'one/one',
-              :url   => '/1/1',
+              label: 'one/one',
+              url:   '/1/1',
             },
             {
-              :label     => 'one/two',
-              :url       => '/1/2',
-              :_children => [
+              label:     'one/two',
+              url:       '/1/2',
+              _children: [
                 {
-                  :label => 'one/two/one',
-                  :url   => '/1/2/1',
+                  label: 'one/two/one',
+                  url:   '/1/2/1',
                 },
                 {
-                  :label => 'one/two/two',
-                  :url   => '/1/2/2',
+                  label: 'one/two/two',
+                  url:   '/1/2/2',
                 },
                 {
-                  :label     => 'one/two/three',
-                  :url       => '/1/2/3',
-                  :_children => [
+                  label:     'one/two/three',
+                  url:       '/1/2/3',
+                  _children: [
                     {
-                      :label => 'one/two/three/one',
-                      :url   => '/1/2/3/1',
+                      label: 'one/two/three/one',
+                      url:   '/1/2/3/1',
                     },
                     {
-                      :label => 'one/two/three/two',
-                      :url   => '/1/2/3/2',
+                      label: 'one/two/three/two',
+                      url:   '/1/2/3/2',
                     },
                   ]
                 },
               ]
             },
             {
-              :label => 'one/three',
-              :url   => '/1/3',
+              label: 'one/three',
+              url:   '/1/3',
             },
           ]
         }
